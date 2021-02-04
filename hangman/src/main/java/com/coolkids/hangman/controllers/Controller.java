@@ -10,28 +10,25 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/hangman")
 public class Controller {
 
-    private final Dao HMGame;
-
     private final HmServiceInterface serviceInterface;
 
-    public Controller(Dao hmGame, HmServiceInterface serviceInterface) {
-        HMGame = hmGame;
+    public Controller(HmServiceInterface serviceInterface) {
         this.serviceInterface = serviceInterface;
     }
 
     @PostMapping("/begin")
     @ResponseStatus(HttpStatus.CREATED)
-    public Game createGame(@RequestBody Game game) {
-
-        return HMGame.start(game);
+    public Game createGame() {
+        return serviceInterface.createGame();
     }
-//
-//    // Sends user's guess, returns round
-//    @PostMapping("/guess")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public Round createRound(@RequestBody Round round) {
-//        return serviceInterface.createRound(round);
-//    }
+
+    // User enters gameId and guess
+    // Sends user's guess, returns round
+    @PostMapping("/guess")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Round createRound(@RequestBody Round round) {
+        return serviceInterface.createRound(round);
+    }
 //
 //    // Returns a specific game based on ID
 //    @GetMapping("/game/{id}")
