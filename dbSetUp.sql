@@ -11,7 +11,7 @@ wrongGuess INT DEFAULT 0);
 
 CREATE TABLE round(
 id INT PRIMARY KEY AUTO_INCREMENT,
-guess VARCHAR(10) NOT NULL,
+guess VARCHAR(200) NOT NULL,
 currentAnswer VARCHAR(200),
 gameId INT,
 FOREIGN KEY fk_game (gameId) REFERENCES game(id)

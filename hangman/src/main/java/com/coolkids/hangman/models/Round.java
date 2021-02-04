@@ -2,7 +2,7 @@ package com.coolkids.hangman.models;
 
 public class Round {
     private int id;
-    private char guess;
+    private String guess;
     private String currentAnswer;
     private int gameId;
 
@@ -12,14 +12,6 @@ public class Round {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public char getGuess() {
-        return guess;
-    }
-
-    public void setGuess(char guess) {
-        this.guess = guess;
     }
 
     public String getCurrentAnswer() {
@@ -36,5 +28,13 @@ public class Round {
 
     public void setGameId(int gameId) {
         this.gameId = gameId;
+    }
+
+    public String getGuess() {
+        return guess;
+    }
+
+    public void setGuess(String guess) {
+        this.guess = guess;
     }
 }
