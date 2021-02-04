@@ -10,7 +10,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.List;
 
 @Repository
 public class GameDBdao implements Dao {
@@ -49,7 +48,22 @@ public class GameDBdao implements Dao {
     @Override
     public Round guess(Round round) {
         final String sql = "INSERT INTO round(guess, currentAnswer, gameId) VALUES(?, ?, ? );";
-        jdbcTemplate.update(sql, round.getGuess(), round.getCurrentAnswer(), round.getGameId() );
+
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update((Connection conn) -> {
+
+            PreparedStatement statement = conn.prepareStatement(
+                    sql,
+                    Statement.RETURN_GENERATED_KEYS);
+
+            statement.setString(1, round.getGuess());
+            statement.setString(2, round.getCurrentAnswer());
+            statement.setInt(3, round.getGameId());
+            return statement;
+
+        }, keyHolder);
+
+        round.setId(keyHolder.getKey().intValue());
 
         final String roundSql = "Select * from Round where id = ? ;";
         return jdbcTemplate.queryForObject(roundSql, new RoundMapper(), round.getId());
