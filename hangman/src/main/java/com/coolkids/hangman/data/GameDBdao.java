@@ -58,7 +58,7 @@ public class GameDBdao implements Dao {
 
     @Override
     public Game findGameById(int gameId) {
-        final String sql = "Select * from Game where GameID = ?;";
+        final String sql = "Select * from Game where id = ?;";
         return jdbcTemplate.queryForObject(sql, new GameMapper(), gameId);
     }
 
