@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.List;
 
 @Repository
 public class GameDBdao implements Dao {
@@ -42,12 +43,15 @@ public class GameDBdao implements Dao {
         return game;
     }
 
-    @Override
-    public Round guess(Game game, String guess) {
-        final String sql = "INSERT INTO round(guess, currentAnswer, gameId) VALUES(?, ?, ? );";
-        jdbcTemplate.update(sql, guess, game.getId() );
 
-        return null;
+    @Override
+    public Round guess(int gameID, String guess) {
+//        final String sql = "INSERT INTO round(guess, currentAnswer, gameId) VALUES(?, ?, ? );";
+//        // jdbcTemplate.update(sql, guess, gameId );
+//
+//        final String roundSql = "Select * from Rounds where GameID = ? order by RoundID desc;";
+//        Round newRounds =  jdbcTemplate.query(roundSql, new RoundMapper(), game.getGameID());
+       return null;
     }
 
     @Override
@@ -61,14 +65,19 @@ public class GameDBdao implements Dao {
     }
 
 
-
     @Override
     public Game findById(int gameId) {
         final String sql = "Select * from Game where GameID = ?;";
         return jdbcTemplate.queryForObject(sql, new GameMapper(), gameId);
     }
 
+    @Override
+    public Round findRoundById(int roundId) {
+        final String sql = "Select * from round where id = ?;";
+        return jdbcTemplate.queryForObject(sql, new RoundMapper(), roundId);
+    }
 
+    //GameMapper:
     private static final class GameMapper implements RowMapper<Game> {
 
         @Override
@@ -82,5 +91,20 @@ public class GameDBdao implements Dao {
             return game;
         }
 
+    }
+
+    //add RoundMapper:
+    private static final class RoundMapper implements RowMapper<Round> {
+
+        @Override
+        public Round mapRow(ResultSet rs, int index) throws SQLException {
+            Round round = new Round();
+            round.setId(rs.getInt("id"));
+            round.setGuess((rs.getString("guess")));
+            round.setCurrentAnswer((rs.getString("currentAnswer")));
+            round.setGameId(rs.getInt("gameId"));
+
+            return round;
+        }
     }
 }

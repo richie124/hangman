@@ -7,19 +7,10 @@ public interface Dao {
     Game start(Game game);
 
     //make a guess
-    Round guess(Game game, String guess);
+    Round guess(int gameId, String guess);
 
     //get answer by game id
     String answer(Game game);
-
-
-
-
-
-    //set wrong guess
-
-    //set in progress - change game to be done
-    //boolean
 
 
     //end game
@@ -27,6 +18,9 @@ public interface Dao {
 
     //find game with game id
     Game findById(int id);
+
+    //find round by id
+    Round findRoundById(int id);
 
 
 }
