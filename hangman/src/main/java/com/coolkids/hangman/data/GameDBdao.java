@@ -55,19 +55,9 @@ public class GameDBdao implements Dao {
         return jdbcTemplate.queryForObject(roundSql, new RoundMapper(), round.getId());
     }
 
-    @Override
-    public String answer(Game game) {
-        return null;
-    }
 
     @Override
-    public boolean finished(Game game) {
-        return false;
-    }
-
-
-    @Override
-    public Game findById(int gameId) {
+    public Game findGameById(int gameId) {
         final String sql = "Select * from Game where GameID = ?;";
         return jdbcTemplate.queryForObject(sql, new GameMapper(), gameId);
     }
@@ -77,6 +67,20 @@ public class GameDBdao implements Dao {
         final String sql = "Select * from round where id = ?;";
         return jdbcTemplate.queryForObject(sql, new RoundMapper(), roundId);
     }
+
+
+
+
+
+    @Override
+    public boolean updateProgress(boolean progress) {
+        return false;
+    }
+
+
+
+
+
 
     //GameMapper:
     private static final class GameMapper implements RowMapper<Game> {
