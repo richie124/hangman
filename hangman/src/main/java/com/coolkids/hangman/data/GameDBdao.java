@@ -45,13 +45,12 @@ public class GameDBdao implements Dao {
 
 
     @Override
-    public Round guess(int gameID, String guess) {
-//        final String sql = "INSERT INTO round(guess, currentAnswer, gameId) VALUES(?, ?, ? );";
-//        // jdbcTemplate.update(sql, guess, gameId );
-//
-//        final String roundSql = "Select * from Rounds where GameID = ? order by RoundID desc;";
-//        Round newRounds =  jdbcTemplate.query(roundSql, new RoundMapper(), game.getGameID());
-       return null;
+    public Round guess(Round round) {
+        final String sql = "INSERT INTO round(guess, currentAnswer, gameId) VALUES(?, ?, ? );";
+        jdbcTemplate.update(sql, round.getGuess(), round.getCurrentAnswer(), round.getGameId() );
+
+        final String roundSql = "Select * from Round where id = ? ;";
+        return jdbcTemplate.queryForObject(roundSql, new RoundMapper(), round.getId());
     }
 
     @Override

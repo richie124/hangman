@@ -7,7 +7,7 @@ public interface Dao {
     Game start(Game game);
 
     //make a guess
-    Round guess(int gameId, String guess);
+    Round guess(Round round);
 
     //get answer by game id
     String answer(Game game);
