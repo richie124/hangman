@@ -65,8 +65,7 @@ public class GameDBdao implements Dao {
 
         round.setId(keyHolder.getKey().intValue());
 
-        final String roundSql = "Select * from Round where id = ? ;";
-        return jdbcTemplate.queryForObject(roundSql, new RoundMapper(), round.getId());
+        return round;
     }
 
 
@@ -94,7 +93,7 @@ public class GameDBdao implements Dao {
 
     @Override
     public Round findPrevRoundByGameId(int gameId) {
-        final String sql = "Select * from round where gameId = ? order by id ASC limit 1;";
+        final String sql = "Select * from round where gameId = ? order by id desc limit 1;";
         return jdbcTemplate.queryForObject(sql, new RoundMapper(), gameId);
     }
 
