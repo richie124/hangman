@@ -8,6 +8,7 @@ public class Game {
     private String answer;
     private boolean inProgress;
     private int wrongGuess;
+    private String currentAnswer;
 
     public Game() {
         inProgress = true;
@@ -52,5 +53,13 @@ public class Game {
 
     public void setWrongGuess(int wrongGuess) {
         this.wrongGuess = wrongGuess;
+    }
+
+    public String getCurrentAnswer() {
+        return currentAnswer;
+    }
+
+    public void setCurrentAnswer(String currentAnswer) {
+        this.currentAnswer = currentAnswer;
     }
 }

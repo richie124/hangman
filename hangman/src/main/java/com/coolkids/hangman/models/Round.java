@@ -3,7 +3,6 @@ package com.coolkids.hangman.models;
 public class Round {
     private int id;
     private String guess;
-    private String currentAnswer;
     private int gameId;
 
     public int getId() {
@@ -12,14 +11,6 @@ public class Round {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getCurrentAnswer() {
-        return currentAnswer;
-    }
-
-    public void setCurrentAnswer(String currentAnswer) {
-        this.currentAnswer = currentAnswer;
     }
 
     public int getGameId() {
