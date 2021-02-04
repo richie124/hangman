@@ -98,6 +98,13 @@ public class GameDBdao implements Dao {
         return jdbcTemplate.queryForObject(sql, new RoundMapper(), gameId);
     }
 
+    @Override
+    public Integer getRoundCountByGameId(int gameId) {
+        final String sql = "select count(*) from round where gameId=?;";
+
+        return jdbcTemplate.queryForObject(sql, Integer.class, gameId);
+    }
+
 
     //GameMapper:
     private static final class GameMapper implements RowMapper<Game> {
@@ -112,7 +119,6 @@ public class GameDBdao implements Dao {
 
             return game;
         }
-
     }
 
     //add RoundMapper:

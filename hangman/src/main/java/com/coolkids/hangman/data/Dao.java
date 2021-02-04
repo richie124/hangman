@@ -19,4 +19,6 @@ public interface Dao {
     boolean updateProgress(boolean progress);
 
     Round findPrevRoundByGameId(int gameId);
+
+    Integer getRoundCountByGameId(int gameId);
 }
