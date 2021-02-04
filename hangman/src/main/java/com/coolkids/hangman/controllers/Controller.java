@@ -1,27 +1,30 @@
 package com.coolkids.hangman.controllers;
 
+import com.coolkids.hangman.data.Dao;
 import com.coolkids.hangman.models.*;
 import com.coolkids.hangman.service.HmServiceInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/hangman")
 public class Controller {
 
+    private final Dao HMGame;
+
     private final HmServiceInterface serviceInterface;
 
-    public Controller(HmServiceInterface serviceInterface) {
+    public Controller(Dao hmGame, HmServiceInterface serviceInterface) {
+        HMGame = hmGame;
         this.serviceInterface = serviceInterface;
     }
 
-//    @PostMapping("/begin")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public Game createGame(@RequestBody Game game) {
-//        return serviceInterface.createGame(game);
-//    }
+    @PostMapping("/begin")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Game createGame(@RequestBody Game game) {
+
+        return HMGame.start(game);
+    }
 //
 //    // Sends user's guess, returns round
 //    @PostMapping("/guess")
