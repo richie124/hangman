@@ -18,4 +18,5 @@ public interface Dao {
     //update for game status - inProgress
     boolean updateProgress(boolean progress);
 
+    Round findPrevRoundByGameId(int gameId);
 }
