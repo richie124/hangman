@@ -29,7 +29,7 @@ public class HmService implements HmServiceInterface {
 
         // Find the answer to the user's game
         int gameId = round.getGameId();
-        Game thisGame = hmDao.findById(gameId);
+        Game thisGame = hmDao.findGameById(gameId);
         String ans = thisGame.getAnswer();
 
         // Get the results of the user's guess compared to the answer
