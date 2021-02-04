@@ -4,12 +4,11 @@ import com.coolkids.hangman.data.Dao;
 import com.coolkids.hangman.models.Game;
 import com.coolkids.hangman.models.Round;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
 
 @Repository
 public class GameDBdao implements Dao {
@@ -44,7 +43,10 @@ public class GameDBdao implements Dao {
     }
 
     @Override
-    public Round guess(int GameID, String guess) {
+    public Round guess(Game game, String guess) {
+        final String sql = "INSERT INTO round(guess, currentAnswer, gameId) VALUES(?, ?, ? );";
+        jdbcTemplate.update(sql, guess, game.getId() );
+
         return null;
     }
 
@@ -56,5 +58,29 @@ public class GameDBdao implements Dao {
     @Override
     public boolean finished(Game game) {
         return false;
+    }
+
+
+
+    @Override
+    public Game findById(int gameId) {
+        final String sql = "Select * from Game where GameID = ?;";
+        return jdbcTemplate.queryForObject(sql, new GameMapper(), gameId);
+    }
+
+
+    private static final class GameMapper implements RowMapper<Game> {
+
+        @Override
+        public Game mapRow(ResultSet rs, int index) throws SQLException {
+            Game game = new Game();
+            game.setId(rs.getInt("id"));
+            game.setAnswer((rs.getString("answer")));
+            game.setInProgress(rs.getBoolean("inProgress"));
+            game.setWrongGuess(rs.getInt("wrongGuess"));
+
+            return game;
+        }
+
     }
 }
