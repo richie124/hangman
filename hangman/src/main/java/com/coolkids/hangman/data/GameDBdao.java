@@ -41,7 +41,6 @@ public class GameDBdao implements Dao {
         game.setId(keyHolder.getKey().intValue());
 
         return game;
-
     }
 
     @Override
