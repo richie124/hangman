@@ -78,9 +78,10 @@ public class GameDBdao implements Dao {
 
     @Override
     public Round findRoundById(int roundId) {
-        final String sql = "Select * from round where id = ?;";
+        final String sql = "Select * from round where id = ? ;";
         return jdbcTemplate.queryForObject(sql, new RoundMapper(), roundId);
     }
+
 
 
 
@@ -91,9 +92,11 @@ public class GameDBdao implements Dao {
         return false;
     }
 
-
-
-
+    @Override
+    public Round findPrevRoundByGameId(int gameId) {
+        final String sql = "Select * from round where gameId = ? order by id ASC limit 1;";
+        return jdbcTemplate.queryForObject(sql, new RoundMapper(), gameId);
+    }
 
 
     //GameMapper:
