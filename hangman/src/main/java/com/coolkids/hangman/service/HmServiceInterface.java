@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface HmServiceInterface {
 
-    public Game createGame(Game game);
+    public Game createGame();
 
     public Round createRound(Round round);
 
