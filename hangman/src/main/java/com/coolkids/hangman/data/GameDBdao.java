@@ -3,6 +3,7 @@ package com.coolkids.hangman.data;
 import com.coolkids.hangman.data.Dao;
 import com.coolkids.hangman.models.Game;
 import com.coolkids.hangman.models.Round;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -16,6 +17,7 @@ public class GameDBdao implements Dao {
 
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public GameDBdao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
