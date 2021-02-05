@@ -55,6 +55,8 @@ function guess() {
            },
            'dataType': 'json',
            success: function(round) {
+             const guess = $('#userInput').val();
+             $('#guesses').append(" " + guess);
              $('#userInput').val('');
              if(round.currentAnswer != "") {
               currentAnswer.empty();
