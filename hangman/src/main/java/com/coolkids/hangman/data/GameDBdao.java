@@ -1,6 +1,5 @@
 package com.coolkids.hangman.data;
 
-import com.coolkids.hangman.data.Dao;
 import com.coolkids.hangman.models.Game;
 import com.coolkids.hangman.models.Round;
 import org.springframework.beans.factory.annotation.Autowired;

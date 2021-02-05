@@ -1,6 +1,7 @@
 $(document).ready(function () {
   startGame();
   guess();
+  newGame()
 });
 
 var id;
@@ -26,6 +27,15 @@ function startGame() {
         
         }
     })
+}
+
+function newGame() {
+  $('#newGame').click(function(){
+    $('#hangmanImage').attr("src","img/0.jpg");
+    $("#guesses").empty();
+    $("#currentAnswer").empty();
+    startGame();
+  })
 }
 
 function createAnswer(answer) {
