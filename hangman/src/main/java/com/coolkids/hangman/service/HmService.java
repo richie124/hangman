@@ -132,6 +132,6 @@ public class HmService implements HmServiceInterface {
 
     @Override
     public List<Round> findRoundById(int id) {
-        return null;
+        return hmDao.findRoundByGameId(id);
     }
 }

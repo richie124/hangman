@@ -6,6 +6,8 @@ import com.coolkids.hangman.service.HmServiceInterface;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/hangman")
 @CrossOrigin
@@ -43,12 +45,12 @@ public class Controller {
 //    public List<Game> all() {
 //        return serviceInterface.allGames();
 //    }
-//
-//    // Returns a list of rounds for the specified game, sorted by time
-//    @GetMapping("/rounds/{id}")
-//    public List<Round> findRoundById(@PathVariable int id) {
-//        return serviceInterface.findRoundById(id);
-//    }
+
+    // Returns a list of rounds for the specified game, sorted by time
+    @GetMapping("/rounds/{id}")
+    public List<Round> findRoundById(@PathVariable int id) {
+        return serviceInterface.findRoundById(id);
+    }
 
     // Returns a specific game based on ID
     @GetMapping()

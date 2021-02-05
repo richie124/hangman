@@ -2,6 +2,8 @@ package com.coolkids.hangman.data;
 import com.coolkids.hangman.models.Game;
 import com.coolkids.hangman.models.Round;
 
+import java.util.List;
+
 public interface Dao {
     //create Game
     Game start(Game game);
@@ -21,4 +23,6 @@ public interface Dao {
     Round findPrevRoundByGameId(int gameId);
 
     Integer getRoundCountByGameId(int gameId);
+
+    List<Round> findRoundByGameId(int id);
 }
