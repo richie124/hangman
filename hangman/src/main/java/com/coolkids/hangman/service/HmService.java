@@ -51,13 +51,12 @@ public class HmService implements HmServiceInterface {
 
             boolean isWin = ans.equals( guess );
 
-            thisGame = checkEndGame(thisGame, guess, ans);
-
-            if (thisGame.isInProgress() && isWin) {
+            if (isWin) {
                 currAns = "You Win! Answer was: " + ans;
             } else {
                 currAns = "You Lose D:   Answer was: " + ans;
             }
+            checkEndGame(thisGame, guess, ans);
 
         } else if ( ans.indexOf( guess.charAt(0) ) < 0 ) {// if (if the first letter in guess is NOT in the answer), wrong guess
             // This was a wrong guess -------------------------------------------
@@ -93,8 +92,8 @@ public class HmService implements HmServiceInterface {
 
             // Set the current answer to the string of the ansArr[]
             boolean isWin = currAns.equals( ans );
-            thisGame = checkEndGame(thisGame, currAns, ans);
-            if (!thisGame.isInProgress() && isWin) {
+            if (isWin) {
+                thisGame = checkEndGame(thisGame, currAns, ans);
                 currAns = "You Win! Answer was: " + ans;
             }
         }
