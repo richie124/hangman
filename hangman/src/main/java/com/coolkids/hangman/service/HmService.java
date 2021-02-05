@@ -7,6 +7,7 @@ import com.coolkids.hangman.models.Round;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class HmService implements HmServiceInterface {
@@ -32,7 +33,7 @@ public class HmService implements HmServiceInterface {
         String ans = thisGame.getAnswer();
 
         // Get the results of the user's guess compared to the answer
-        String guess = round.getGuess();
+        String guess = round.getGuess().toLowerCase();
 
         String prevGuess = "";
         String currAns = "";
@@ -43,21 +44,19 @@ public class HmService implements HmServiceInterface {
             prevGuess = prevRound.getCurrentAnswer();
         }
 
-
-
         // If guess is longer than 1, compare guess directly with answer
         // Otherwise check if letter guess in answer
         if ( guess.length() > 1 ) {
             // Compare with ans (make sure all lowercase)
 
-            boolean isWin = guess.equals( ans.toLowerCase() );
+            boolean isWin = ans.equals( guess );
 
             thisGame = checkEndGame(thisGame, guess, ans);
 
             if (thisGame.isInProgress() && isWin) {
-                currAns = "You Win!";
+                currAns = "You Win! Answer was: " + ans;
             } else {
-                currAns = "You Lose D:";
+                currAns = "You Lose D:   Answer was: " + ans;
             }
 
         } else if ( ans.indexOf( guess.charAt(0) ) < 0 ) {// if (if the first letter in guess is NOT in the answer), wrong guess
@@ -69,7 +68,7 @@ public class HmService implements HmServiceInterface {
             thisGame.setWrongGuess(prevWrongGuesses+1);
             if ( thisGame.getWrongGuess() >= 6 ) {
                 thisGame = checkEndGame(thisGame, guess, ans);
-                currAns = "You Lose D:";
+                currAns = "You Lose D:   Answer was: " + ans;
             } else {
                 currAns = prevGuess;
             }
@@ -90,12 +89,16 @@ public class HmService implements HmServiceInterface {
                     ansArr[i] = '_';
                 }
             }
-            // Set the current answer to the string of the ansArr[]
             currAns = String.valueOf(ansArr);
+
+            // Set the current answer to the string of the ansArr[]
+            boolean isWin = currAns.equals( ans );
+            thisGame = checkEndGame(thisGame, currAns, ans);
+            if (!thisGame.isInProgress() && isWin) {
+                currAns = "You Win! Answer was: " + ans;
+            }
         }
 
-
-        // checkWin(guess, ans) --------------------------
 
 
         round.setCurrentAnswer(currAns);
@@ -122,7 +125,7 @@ public class HmService implements HmServiceInterface {
 
     @Override
     public Game findById(int id) {
-        return null;
+        return hmDao.findGameById(id);
     }
 
     @Override

@@ -31,12 +31,12 @@ public class Controller {
         return serviceInterface.createRound(round);
     }
 
-//
-//    // Returns a specific game based on ID
-//    @GetMapping("/game/{id}")
-//    public Game findById(@PathVariable int id) {
-//        return serviceInterface.findById(id);
-//    }
+
+    // Returns a specific game based on ID
+    @GetMapping("/game/{id}")
+    public Game findById(@PathVariable int id) {
+        return serviceInterface.findById(id);
+    }
 //
 //    // Returns a list of all games, with answer nulled if game status is not true (completed)
 //    @GetMapping("/game")
