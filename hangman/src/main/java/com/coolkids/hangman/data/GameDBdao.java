@@ -10,7 +10,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.util.List;
 
 @Repository
 public class GameDBdao implements Dao {
@@ -49,10 +48,24 @@ public class GameDBdao implements Dao {
     @Override
     public Round guess(Round round) {
         final String sql = "INSERT INTO round(guess, currentAnswer, gameId) VALUES(?, ?, ? );";
-        jdbcTemplate.update(sql, round.getGuess(), round.getCurrentAnswer(), round.getGameId() );
 
-        final String roundSql = "Select * from Round where id = ? ;";
-        return jdbcTemplate.queryForObject(roundSql, new RoundMapper(), round.getId());
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update((Connection conn) -> {
+
+            PreparedStatement statement = conn.prepareStatement(
+                    sql,
+                    Statement.RETURN_GENERATED_KEYS);
+
+            statement.setString(1, round.getGuess());
+            statement.setString(2, round.getCurrentAnswer());
+            statement.setInt(3, round.getGameId());
+            return statement;
+
+        }, keyHolder);
+
+        round.setId(keyHolder.getKey().intValue());
+
+        return round;
     }
 
 
@@ -64,22 +77,36 @@ public class GameDBdao implements Dao {
 
     @Override
     public Round findRoundById(int roundId) {
-        final String sql = "Select * from round where id = ?;";
+        final String sql = "Select * from round where id = ? ;";
         return jdbcTemplate.queryForObject(sql, new RoundMapper(), roundId);
     }
 
 
 
-
-
     @Override
-    public boolean updateProgress(boolean progress) {
-        return false;
+    public Game updateProgress(Game game) {
+        final String sql = "UPDATE game SET "
+                + "answer = ?, "
+                + "inProgress = ? "
+                + "wrongGuess = ? "
+                + "WHERE id = ?;";
+
+        jdbcTemplate.update(sql, game.getAnswer(), game.isInProgress(), game.getId());
+        return findGameById(game.getId());
     }
 
+    @Override
+    public Round findPrevRoundByGameId(int gameId) {
+        final String sql = "Select * from round where gameId = ? order by id desc limit 1;";
+        return jdbcTemplate.queryForObject(sql, new RoundMapper(), gameId);
+    }
 
+    @Override
+    public Integer getRoundCountByGameId(int gameId) {
+        final String sql = "select count(*) from round where gameId=?;";
 
-
+        return jdbcTemplate.queryForObject(sql, Integer.class, gameId);
+    }
 
 
     //GameMapper:
@@ -95,7 +122,6 @@ public class GameDBdao implements Dao {
 
             return game;
         }
-
     }
 
     //add RoundMapper:
