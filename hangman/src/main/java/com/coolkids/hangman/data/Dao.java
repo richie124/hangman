@@ -7,13 +7,18 @@ public interface Dao {
     Game start(Game game);
 
     //make a guess
-    Round guess(int GameID, String guess);
+    Round guess(Round round);
 
-    //get answer by game id
-    String answer(Game game);
+    //find game with game id
+    Game findGameById(int id);
 
-    //end game
-    boolean finished(Game game);
+    //find round by id
+    Round findRoundById(int id);
 
+    //update for game status - inProgress
+    Game updateProgress(Game game);
 
+    Round findPrevRoundByGameId(int gameId);
+
+    Integer getRoundCountByGameId(int gameId);
 }
