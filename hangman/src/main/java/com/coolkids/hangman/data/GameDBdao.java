@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.List;
 
 @Repository
 public class GameDBdao implements Dao {
@@ -105,6 +106,12 @@ public class GameDBdao implements Dao {
         final String sql = "select count(*) from round where gameId=?;";
 
         return jdbcTemplate.queryForObject(sql, Integer.class, gameId);
+    }
+
+    @Override
+    public List<Round> findRoundByGameId(int id) {
+        final String sql = "SELECT * FROM round WHERE gameId = ? ORDER BY id DESC;";
+        return jdbcTemplate.query(sql, new RoundMapper(), id);
     }
 
 

@@ -7,7 +7,6 @@ import com.coolkids.hangman.models.Round;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 
 @Service
 public class HmService implements HmServiceInterface {
@@ -54,41 +53,43 @@ public class HmService implements HmServiceInterface {
             if (isWin) {
                 currAns = "You Win! Answer was: " + ans;
             } else {
-                currAns = "You Lose D:   Answer was: " + ans;
+                currAns = "You Lose. Answer was: " + ans;
             }
             checkEndGame(thisGame, guess, ans);
 
         } else if ( ans.indexOf( guess.charAt(0) ) < 0 ) {// if (if the first letter in guess is NOT in the answer), wrong guess
-            // This was a wrong guess -------------------------------------------
-            // update wrongGuess in game table
-            // If wrongGuess is now 6, player died D:
-            // Set currAns to UR DED
+
             int prevWrongGuesses = thisGame.getWrongGuess();
             thisGame.setWrongGuess(prevWrongGuesses+1);
             if ( thisGame.getWrongGuess() >= 6 ) {
                 thisGame = checkEndGame(thisGame, guess, ans);
-                currAns = "You Lose D:   Answer was: " + ans;
+                currAns = "You Lose. Answer was: " + ans;
             } else {
                 currAns = prevGuess;
             }
 
-
         } else {// If a single letter guess, and guess is in answer, go through loop
             // create currAnswer array length of answer
             char[] ansArr = ans.toCharArray();
+            char[] finalAnsArr = new char[ansArr.length*2];
 
             // For each letter in the ansArray
             for ( int i = 0; i < ansArr.length; i++ ) {
+                int ansLetter = i*2;
+                finalAnsArr[ansLetter] = ansArr[i];
 
                 // If char in the answer iw a space, leave it alone and continue with next char
                 // Else if the letter is NOT in the guess, or in the previous answer, set it to an underscore
                 if(ansArr[i] == ' '){
                     continue;
                 } else if (guess.indexOf(ansArr[i]) < 0 && prevGuess.indexOf(ansArr[i]) < 0) { // if (a is not in guess && a is not in prevGuess)
-                    ansArr[i] = '_';
+                    int blank = i*2;
+                    finalAnsArr[blank] = '_';
                 }
+                int space = (i*2)+1;
+                finalAnsArr[space] = ' ';
             }
-            currAns = String.valueOf(ansArr);
+            currAns = String.valueOf(finalAnsArr);
 
             // Set the current answer to the string of the ansArr[]
             boolean isWin = currAns.equals( ans );
@@ -106,9 +107,6 @@ public class HmService implements HmServiceInterface {
         return hmDao.guess(round);
     }
 
-//    private String checkGuess(Game thisGame, String prevGuess, String guess, String ans) {
-//        return currAns;
-//    }
 
     private Game checkEndGame(Game game, String guess, String answer){
 
@@ -134,6 +132,6 @@ public class HmService implements HmServiceInterface {
 
     @Override
     public List<Round> findRoundById(int id) {
-        return null;
+        return hmDao.findRoundByGameId(id);
     }
 }
