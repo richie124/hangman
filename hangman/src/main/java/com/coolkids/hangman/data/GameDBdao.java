@@ -84,14 +84,13 @@ public class GameDBdao implements Dao {
 
 
     @Override
-    public Game updateProgress(Game game) {
+    public Game updateGame(Game game) {
         final String sql = "UPDATE game SET "
-                + "answer = ?, "
-                + "inProgress = ? "
+                + "inProgress = ?, "
                 + "wrongGuess = ? "
                 + "WHERE id = ?;";
 
-        jdbcTemplate.update(sql, game.getAnswer(), game.isInProgress(), game.getId());
+        jdbcTemplate.update(sql, game.isInProgress(), game.getWrongGuess(), game.getId());
         return findGameById(game.getId());
     }
 
