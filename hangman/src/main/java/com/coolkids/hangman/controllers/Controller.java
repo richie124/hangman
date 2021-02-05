@@ -39,7 +39,7 @@ public class Controller {
     public Game findById(@PathVariable int id) {
         return serviceInterface.findById(id);
     }
-//
+
 //    // Returns a list of all games, with answer nulled if game status is not true (completed)
 //    @GetMapping("/game")
 //    public List<Game> all() {
