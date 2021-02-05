@@ -93,8 +93,8 @@ public class HmService implements HmServiceInterface {
 
             // Set the current answer to the string of the ansArr[]
             boolean isWin = currAns.equals( ans );
-            thisGame = checkEndGame(thisGame, currAns, ans);
-            if (!thisGame.isInProgress() && isWin) {
+            if (isWin) {
+                thisGame = checkEndGame(thisGame, currAns, ans);
                 currAns = "You Win! Answer was: " + ans;
             }
         }
