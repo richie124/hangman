@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/hangman")
+@CrossOrigin
 public class Controller {
 
     private final HmServiceInterface serviceInterface;
