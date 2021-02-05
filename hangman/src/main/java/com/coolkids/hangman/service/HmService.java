@@ -36,6 +36,7 @@ public class HmService implements HmServiceInterface {
 
         String prevGuess = "";
         String currAns = "";
+        String finCurrAns = "";
 
         // Get the previous CurrentAnswer
         if( hmDao.getRoundCountByGameId(gameId) > 0 ) {
@@ -51,9 +52,9 @@ public class HmService implements HmServiceInterface {
             boolean isWin = ans.equals( guess );
 
             if (isWin) {
-                currAns = "You Win! Answer was: " + ans;
+                finCurrAns = "You Win! Answer was: " + ans;
             } else {
-                currAns = "You Lose. Answer was: " + ans;
+                finCurrAns = "You Lose. Answer was: " + ans;
             }
             checkEndGame(thisGame, guess, ans);
 
@@ -63,9 +64,9 @@ public class HmService implements HmServiceInterface {
             thisGame.setWrongGuess(prevWrongGuesses+1);
             if ( thisGame.getWrongGuess() >= 6 ) {
                 thisGame = checkEndGame(thisGame, guess, ans);
-                currAns = "You Lose. Answer was: " + ans;
+                finCurrAns = "You Lose. Answer was: " + ans;
             } else {
-                currAns = prevGuess;
+                finCurrAns = prevGuess;
             }
 
         } else {// If a single letter guess, and guess is in answer, go through loop
@@ -85,23 +86,26 @@ public class HmService implements HmServiceInterface {
                 } else if (guess.indexOf(ansArr[i]) < 0 && prevGuess.indexOf(ansArr[i]) < 0) { // if (a is not in guess && a is not in prevGuess)
                     int blank = i*2;
                     finalAnsArr[blank] = '_';
+                    ansArr[i] = '_';
                 }
                 int space = (i*2)+1;
                 finalAnsArr[space] = ' ';
             }
-            currAns = String.valueOf(finalAnsArr);
+            finCurrAns = String.valueOf(finalAnsArr);
+            currAns = String.valueOf(ansArr);
+
 
             // Set the current answer to the string of the ansArr[]
             boolean isWin = currAns.equals( ans );
             if (isWin) {
                 thisGame = checkEndGame(thisGame, currAns, ans);
-                currAns = "You Win! Answer was: " + ans;
+                finCurrAns = "You Win! Answer was: " + ans;
             }
         }
 
 
 
-        round.setCurrentAnswer(currAns);
+        round.setCurrentAnswer(finCurrAns);
         hmDao.updateGame(thisGame);
 
         return hmDao.guess(round);
