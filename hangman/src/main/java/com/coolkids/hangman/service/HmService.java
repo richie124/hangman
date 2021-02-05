@@ -7,7 +7,6 @@ import com.coolkids.hangman.models.Round;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class HmService implements HmServiceInterface {
@@ -35,32 +34,90 @@ public class HmService implements HmServiceInterface {
         // Get the results of the user's guess compared to the answer
         String guess = round.getGuess();
 
+        String prevGuess = "";
+        String currAns = "";
+
         // Get the previous CurrentAnswer
-        Round prevRound = hmDao.findRoundById(round.getId());
-        String prevAnswer = prevRound.getCurrentAnswer();
-
-        // create currAnswer array length of answer
-        char[] ansArr = ans.toCharArray();
-
-        // For each letter in the answer
-        for ( int i = 0; i < ansArr.length; i++ ) {
-            // If the letter is NOT in the guess, or in the previous answer, set it to an underscore
-            if (guess.indexOf(ansArr[i]) < 0 || prevAnswer.indexOf(ansArr[i]) < 0) {
-                ansArr[i] = '_';
-            }
+        if( hmDao.getRoundCountByGameId(gameId) > 0 ) {
+            Round prevRound = hmDao.findPrevRoundByGameId(gameId);
+            prevGuess = prevRound.getCurrentAnswer();
         }
 
-        // Set the current answer to the string of the ansArr[]
-        String currAns = String.valueOf(ansArr);
+
+
+        // If guess is longer than 1, compare guess directly with answer
+        // Otherwise check if letter guess in answer
+        if ( guess.length() > 1 ) {
+            // Compare with ans (make sure all lowercase)
+
+            boolean isWin = guess.equals( ans.toLowerCase() );
+
+            thisGame = checkEndGame(thisGame, guess, ans);
+
+            if (thisGame.isInProgress() && isWin) {
+                currAns = "You Win!";
+            } else {
+                currAns = "You Lose D:";
+            }
+
+        } else if ( ans.indexOf( guess.charAt(0) ) < 0 ) {// if (if the first letter in guess is NOT in the answer), wrong guess
+            // This was a wrong guess -------------------------------------------
+            // update wrongGuess in game table
+            // If wrongGuess is now 6, player died D:
+            // Set currAns to UR DED
+            int prevWrongGuesses = thisGame.getWrongGuess();
+            thisGame.setWrongGuess(prevWrongGuesses+1);
+            if ( thisGame.getWrongGuess() >= 6 ) {
+                thisGame = checkEndGame(thisGame, guess, ans);
+                currAns = "You Lose D:";
+            } else {
+                currAns = prevGuess;
+            }
+
+
+        } else {// If a single letter guess, and guess is in answer, go through loop
+            // create currAnswer array length of answer
+            char[] ansArr = ans.toCharArray();
+
+            // For each letter in the ansArray
+            for ( int i = 0; i < ansArr.length; i++ ) {
+
+                // If char in the answer iw a space, leave it alone and continue with next char
+                // Else if the letter is NOT in the guess, or in the previous answer, set it to an underscore
+                if(ansArr[i] == ' '){
+                    continue;
+                } else if (guess.indexOf(ansArr[i]) < 0 && prevGuess.indexOf(ansArr[i]) < 0) { // if (a is not in guess && a is not in prevGuess)
+                    ansArr[i] = '_';
+                }
+            }
+            // Set the current answer to the string of the ansArr[]
+            currAns = String.valueOf(ansArr);
+        }
+
+
+        // checkWin(guess, ans) --------------------------
+
+
         round.setCurrentAnswer(currAns);
+        hmDao.updateGame(thisGame);
 
-
-        // If the user guessed all right numbers in the right places, set the game status to completed (true)
-//        if(guessResultSet[0] == 4) {
-//            hmDao.finishGame(gameId);
-//        }
-        // Inserts a row into the rounds table
         return hmDao.guess(round);
+    }
+
+//    private String checkGuess(Game thisGame, String prevGuess, String guess, String ans) {
+//        return currAns;
+//    }
+
+    private Game checkEndGame(Game game, String guess, String answer){
+
+        // If WIN
+        if ( guess.equals( answer.toLowerCase() ) || game.getWrongGuess() >= 6) {
+            // Set inProgress to false
+            game.setInProgress(false);
+            return hmDao.updateGame(game);
+        }
+
+        return game;
     }
 
     @Override
